@@ -1,0 +1,41 @@
+---
+- name: ensure homer directories exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "{{ homer_config_dir }}"
+    - "{{ homer_icons_dir }}"
+
+- name: template homer config
+  template:
+    src: config.yml.j2
+    dest: "{{ homer_config_dir }}/config.yml"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy logo icons
+  copy:
+    src: "{{ item }}"
+    dest: "{{ homer_icons_dir }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ homer_logo_list }}"
+
+- name: create homer docker container
+  docker_container:
+    detach: yes
+    image: "{{ homer_docker_image }}"
+    name: homer
+    published_ports:
+      - "{{ homer_web_port }}:8080"
+    pull: yes
+    restart_policy: always
+    volumes:
+      - "{{ homer_config_dir }}/config.yml:/www/assets/config.yml:ro"
+      - "{{ homer_icons_dir }}:/www/assets/icons/logo:ro"

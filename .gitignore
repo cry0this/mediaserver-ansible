@@ -1,0 +1,7 @@
+ansible/group_vars/secrets
+
+.ssh/*
+!.ssh/.placeholder
+
+venv
+test.yml

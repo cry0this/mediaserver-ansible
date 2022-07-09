@@ -1,0 +1,9 @@
+---
+network_dns_apt_packages:
+  - bind9
+  - bind9utils
+  - bind9-doc
+
+network_wireguard_apt_packages:
+  - wireguard
+  - resolvconf

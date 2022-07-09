@@ -1,0 +1,13 @@
+---
+- name: template netplan config
+  template:
+    src: netplan.yaml.j2
+    dest: /etc/netplan/01-netcfg.yaml
+    owner: root
+    group: root
+    mode: 0644
+
+- name: remove default netplan config
+  file:
+    path: /etc/netplan/00-installer-config.yaml
+    state: absent

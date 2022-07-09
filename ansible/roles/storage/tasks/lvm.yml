@@ -1,0 +1,23 @@
+
+- name: create lvm group for storage
+  lvg:
+    vg: "{{ storage_vg_name }}"
+    pvs: "{{ storage_lvg_pvs }}"
+
+- name: create cache volume
+  lvol:
+    vg: "{{ storage_vg_name }}"
+    lv: cache
+    pvs: "{{ storage_cache_partition }}"
+    size: "{{ storage_cache_partition_size }}b"
+    opts: "--type cache-pool --cachemode writethrough --poolmetadatasize {{ storage_cache_meta_size }}b"
+  when: storage_cache_enabled|bool
+  ignore_errors: True  # task will fail if lv already exists for some reason
+
+- name: create data volume
+  lvol:
+    vg: "{{ storage_vg_name }}"
+    lv: data
+    pvs: "{{ storage_data_partition }}"
+    size: "{{ storage_data_partition_size }}b"
+    opts: "{{ storage_data_lv_opts }}"

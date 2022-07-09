@@ -1,0 +1,24 @@
+---
+- name: set ip address fact
+  set_fact:
+    network_ip_address: |-
+      {% set ip_address = ansible_facts[network_interface]['ipv4']['address'] %}
+      {% set ip_address = ip_address + '/' + ansible_facts[network_interface]['ipv4']['prefix'] %}
+      {{ ip_address }}
+  when: not network_static_ip_enabled|bool
+
+- include_tasks: static_ip.yml
+  when: network_static_ip_enabled|bool
+
+- name: add domain to /ets/hosts if not exists
+  lineinfile:
+    regex: '.*\s{{ network_domain }}'
+    line: "{{ network_ip_address.split('/')[0] }} {{ network_domain }}"
+    path: /etc/hosts
+  register: hosts_replace
+
+- include_tasks: dns.yml
+  when: network_dns_enabled|bool
+
+- include_tasks: wireguard.yml
+  when: network_wireguard_enabled|bool

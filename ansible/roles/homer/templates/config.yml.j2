@@ -1,0 +1,143 @@
+---
+# Homepage configuration
+# See https://fontawesome.com/v5/search for icons options
+
+# Optional: Use external configuration file.
+# Using this will ignore remaining config in this file
+# externalConfig: https://example.com/server-luci/config.yaml
+
+title: "Dashboard"
+subtitle: "Mediaserver"
+# documentTitle: "Welcome" # Customize the browser tab text
+logo: "logo.png"
+# Alternatively a fa icon can be provided:
+# icon: "fas fa-skull-crossbones"
+
+header: true # Set to false to hide the header
+# Optional: Different hotkey for search, defaults to "/"
+# hotkey:
+#   search: "Shift"
+footer: false
+
+columns: "auto" # "auto" or number (must be a factor of 12: 1, 2, 3, 4, 6, 12)
+connectivityCheck: true # whether you want to display a message when the apps are not accessible anymore (VPN disconnected for example).
+                        # You should set it to true when using an authentication proxy, it also reloads the page when a redirection is detected when checking connectivity.
+
+# Optional: Proxy / hosting option
+proxy:
+  useCredentials: false # send cookies & authorization headers when fetching service specific data. Set to `true` if you use an authentication proxy. Can be overrided on service level.
+
+# Set the default layout and color scheme
+defaults:
+  layout: columns # Either 'columns', or 'list'
+  colorTheme: auto # One of 'auto', 'light', or 'dark'
+
+# Optional theming
+theme: default # 'default' or one of the themes available in 'src/assets/themes'.
+
+colors:
+  light:
+    highlight-primary: "#3367d6"
+    highlight-secondary: "#4285f4"
+    highlight-hover: "#5a95f5"
+    background: "#f5f5f5"
+    card-background: "#ffffff"
+    text: "#363636"
+    text-header: "#424242"
+    text-title: "#303030"
+    text-subtitle: "#424242"
+    card-shadow: rgba(0, 0, 0, 0.1)
+    link: "#3273dc"
+    link-hover: "#363636"
+
+  dark:
+    highlight-primary: "#3367d6"
+    highlight-secondary: "#4285f4"
+    highlight-hover: "#5a95f5"
+    background: "#131313"
+    card-background: "#2b2b2b"
+    text: "#eaeaea"
+    text-header: "#ffffff"
+    text-title: "#fafafa"
+    text-subtitle: "#f5f5f5"
+    card-shadow: rgba(0, 0, 0, 0.4)
+    link: "#3273dc"
+    link-hover: "#ffdd57"
+
+links: []
+
+services:
+  - name: "Медиа"
+    icon: "fa-solid fa-photo-film"
+    items:
+      - name: "Jellyfin"
+        logo: "assets/icons/logo/jellyfin_logo.png"
+        subtitle: "Проигрыватель для скачанного медиа"
+        tag: "media"
+        keywords: "self hosted jellyfin player" # optional keyword used for searching purpose
+        url: "http://{{ network_domain }}:{{ jellyfin_web_port }}"
+        target: "_blank"
+
+      - name: "Peerflix"
+        logo: "assets/icons/logo/peerflix_logo.png"
+        subtitle: "Сервер для стриминга онлайн торрент-файлов"
+        tag: "media"
+        keywords: "self hosted torrent peerflix streaming"
+        url: "http://{{ network_domain }}:{{ peerflix_web_port }}"
+        target: "_blank"
+
+  - name: "Загрузки"
+    icon: "fa-solid fa-download"
+    items:
+      - name: "Radarr"
+        logo: "assets/icons/logo/radarr_logo.png"
+        subtitle: "Утилита для поиска и скачивания фильмов через торрент-трекеры"
+        tag: "downloader"
+        keywords: "self hosted radarr downloader"
+        url: "http://{{ network_domain }}/radarr"
+        target: "_blank"
+
+      - name: "Sonarr"
+        logo: "assets/icons/logo/sonarr_logo.png"
+        subtitle: "Еще одна качалка торрентов"
+        tag: "downloader"
+        keywords: "self hosted sonarr downloader"
+        url: "http://{{ network_domain }}/sonarr"
+        target: "_blank"
+
+  - name: "Сервисы"
+    icon: "fa-brands fa-servicestack"
+    items:
+      - name: "Jackett"
+        logo: "assets/icons/logo/jackett_logo.png"
+        subtitle: "API для поиска по торрент-трекерам"
+        tag: "api"
+        keywords: "self hosted jackett api"
+        url: "http://{{ network_domain }}/jackett"
+        target: "_blank"
+
+      - name: "FlareSolverr"
+        logo: "assets/icons/logo/flaresolverr_logo.png"
+        subtitle: "Прокси для Jackett"
+        tag: "proxy"
+        keywords: "self hosted flaresolverr proxy"
+        url: "http://{{ network_domain }}/flaresolverr"
+        target: "_blank"
+
+  - name: "Система"
+    icon: "fa-solid fa-gears"
+    items:
+      - name: "Portainer"
+        logo: "assets/icons/logo/portainer_logo.png"
+        subtitle: "Управление docker-контейнерами"
+        tag: "docker"
+        keywords: "self hosted portainer docker"
+        url: "http://{{ network_domain }}/portainer"
+        target: "_blank"
+
+      - name: "Zabbix"
+        logo: "assets/icons/logo/zabbix_logo.png"
+        subtitle: "Мониторинг сервера"
+        tag: "monitoring"
+        keywords: "self hosted zabbix monitoring"
+        url: "http://{{ network_domain }}/zabbix"

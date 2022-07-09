@@ -1,0 +1,19 @@
+---
+docker_unneeded_apt_packages:
+  - docker
+  - docker-engine
+  - docker.io
+  - containerd
+  - runc
+
+docker_gpg_key_url: "https://download.docker.com/linux/ubuntu/gpg"
+docker_gpg_key_dest: "/etc/apt/keyrings/docker.gpg"
+
+docker_repo_url: "https://download.docker.com/linux/ubuntu"
+
+docker_apt_packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-compose-plugin
+  - python3-docker

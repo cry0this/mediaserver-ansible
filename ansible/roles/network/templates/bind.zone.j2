@@ -1,0 +1,12 @@
+$TTL    2h
+@       IN      SOA     ns1.{{ network_domain }}.    root.{{ network_domain }}. (
+                            2018111111 ; Serial
+                            8h         ; Refresh
+                            30m        ; Retry
+                            1w         ; Expire
+                            1h )       ; Negative Cache TTL
+
+ns1     IN      A       {{ network_ip_address.split('/')[0] }}
+@       IN      NS      ns1.{{ network_domain }}.
+@       IN      A       {{ network_ip_address.split('/')[0] }}
+www.    IN      A       {{ network_ip_address.split('/')[0] }}

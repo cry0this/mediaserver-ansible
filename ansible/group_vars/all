@@ -1,0 +1,41 @@
+---
+storage_vg_name: vgstorage0
+storage_mount_point: /storage
+storage_fs_type: xfs
+
+storage_data_partition: /dev/md0
+
+storage_cache_enabled: True  # useful to set ssd cache for hdd
+storage_cache_partition: /dev/md1
+storage_cache_mode: writethrough
+
+storage_var_directory: "{{ storage_mount_point }}/files"
+storage_media_directory: "{{ storage_var_directory }}/media"
+
+network_domain: media.box
+
+network_interface: enp1s0
+
+network_static_ip_enabled: True
+network_ip_address: 192.168.122.141/24
+network_default_gateway: 192.168.122.1
+
+network_dns_enabled: True
+
+network_wireguard_enabled: True
+network_wireguard_interface: wg0
+
+# config for wireguard client (define it in group_vars/secrets)
+network_wireguard_priv_key:
+network_wireguard_address:
+network_wireguard_dns:
+network_wireguard_pub_key:
+network_wireguard_preshared_key:
+network_wireguard_endpoint:
+network_wireguard_allowed_ips:
+
+force_reboot: True
+
+homer_web_port: 80
+jellyfin_web_port: 8096
+peerflix_web_port: 9000

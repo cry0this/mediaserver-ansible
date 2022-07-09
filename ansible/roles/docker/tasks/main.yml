@@ -1,0 +1,31 @@
+---
+- name: remove default docker repo packages
+  apt:
+    name: "{{ docker_unneeded_apt_packages }}"
+    state: absent
+  retries: 3
+  delay: 5
+
+- name: add docker-ce repo key
+  apt_key:
+    url: "{{ docker_gpg_key_url }}"
+
+- name: add docker-ce repo
+  apt_repository:
+    repo: "deb {{ docker_repo_url }} {{ ansible_facts['distribution_release'] }} stable"
+
+- name: install docker-ce packages
+  apt:
+    name: "{{ docker_apt_packages }}"
+  retries: 3
+  delay: 5
+
+- name: ensure docker is enabled
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: create network for torrent services
+  docker_network:
+    name: torrent_network

@@ -1,0 +1,30 @@
+---
+- name: ensure jellifin directories exists
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "{{ storage_mount_point }}/docker/jellyfin/config"
+    - "{{ storage_mount_point }}/docker/jellyfin/cache"
+
+- name: create jellyfin container
+  docker_container:
+    detach: yes
+    image: linuxserver/jellyfin:10.8.1
+    name: jellyfin
+    published_ports:
+      - "{{ jellyfin_web_port }}:8096"
+      - "8920:8920"
+      - "7359:7359/udp"
+      - "1900:1900/udp"
+    pull: yes
+    restart_policy: always
+    volumes:
+      - "{{ storage_media_directory }}:/media"
+      - "{{ storage_mount_point }}/docker/jellyfin/config:/config"
+      - "{{ storage_mount_point }}/docker/jellyfin/cache:/cache"
+    devices:
+      - "/dev/dri:/dev/dri"

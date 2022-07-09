@@ -1,0 +1,11 @@
+---
+preflight_unneeded_snap_packages:
+  - lxd
+  - core20
+  - snapd
+
+preflight_unneeded_apt_packages:
+  - snapd
+
+preflight_essential_apt_packages:
+  - ca-certificates

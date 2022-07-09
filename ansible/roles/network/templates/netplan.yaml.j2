@@ -1,0 +1,10 @@
+network:
+    version: 2
+    renderer: networkd
+    ethernets:
+        {{ network_interface }}:
+            addresses:
+                - {{ network_ip_address }}
+            routes:
+                - to: default
+                  via: {{ network_default_gateway }}

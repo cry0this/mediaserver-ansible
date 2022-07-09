@@ -1,0 +1,6 @@
+---
+- name: install packages for storage setup
+  apt:
+    name: "{{ storage_apt_packages }}"
+  retries: 3
+  delay: 5

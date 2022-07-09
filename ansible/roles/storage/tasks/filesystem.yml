@@ -1,0 +1,14 @@
+---
+- name: format storage to xfs
+  filesystem:
+    fstype: "{{ storage_fs_type }}"
+    dev: "/dev/{{ storage_vg_name }}/data"
+
+- name: mount storage and add to fstab
+  mount:
+    fstype: "{{ storage_fs_type }}"
+    opts: discard,noatime
+    passno: 1
+    path: "{{ storage_mount_point }}"
+    src: "/dev/{{ storage_vg_name }}/data"
+    state: mounted

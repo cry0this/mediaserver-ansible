@@ -1,0 +1,4 @@
+zone "{{ network_domain }}" {
+    type master;
+    file "/etc/bind/db.{{ network_domain }}"; # zone file path
+};

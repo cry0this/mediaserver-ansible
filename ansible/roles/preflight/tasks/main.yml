@@ -1,0 +1,29 @@
+---
+- name: check for snap executable
+  shell: snap
+  changed_when: False
+  ignore_errors: True
+  register: snap_info
+
+- name: remove unneeded snap packages
+  snap:
+    name: "{{ item }}"
+    state: absent
+  with_items: "{{ preflight_unneeded_snap_packages }}"
+  retries: 3
+  delay: 5
+  when: snap_info is not failed
+
+- name: remove unneeded apt packages
+  apt:
+    name: "{{ preflight_unneeded_apt_packages }}"
+    state: absent
+  retries: 3
+  delay: 5
+
+- name: install essential packages
+  apt:
+    name: "{{ preflight_essential_apt_packages }}"
+    update_cache: yes
+  retries: 3
+  delay: 5

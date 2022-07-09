@@ -1,0 +1,10 @@
+[Interface]
+PrivateKey = {{ network_wireguard_priv_key }}
+Address = {{ network_wireguard_address }}
+DNS = {{ network_wireguard_dns }}
+
+[Peer]
+PublicKey = {{ network_wireguard_pub_key }}
+PresharedKey = {{ network_wireguard_preshared_key }}
+Endpoint = {{ network_wireguard_endpoint }}
+AllowedIPs = {{ network_wireguard_allowed_ips }}

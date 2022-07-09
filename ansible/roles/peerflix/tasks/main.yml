@@ -1,0 +1,22 @@
+---
+- name: ensure peerflix tmp directory exists
+  file:
+    path: "{{ storage_mount_point }}/docker/peerflix/tmp"
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+
+- name: create peerflix docker container
+  docker_container:
+    detach: yes
+    image: asapach/peerflix-server:latest
+    name: peerflix
+    published_ports:
+      - "{{ peerflix_web_port }}:9000"
+      - "6881:6881"
+      - "6881:6881/udp"
+    pull: yes
+    restart_policy: always
+    volumes:
+      - "{{ storage_mount_point }}/docker/peerflix/tmp:/tmp/torrent-stream"

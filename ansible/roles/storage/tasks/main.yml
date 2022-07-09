@@ -1,0 +1,10 @@
+---
+- include_tasks: facts.yml
+- include_tasks: apt.yml
+- include_tasks: lvm.yml
+- include_tasks: filesystem.yml
+
+- name: ensure storage directories exists
+  file:
+    path: "{{ storage_media_directory }}"
+    state: directory

@@ -1,0 +1,67 @@
+---
+- assert:
+    that:
+      - storage_vg_name is defined
+      - storage_mount_point is defined
+      - storage_data_partition is defined
+      - storage_cache_enabled is defined
+      - storage_fs_type is defined
+
+- name: check data partition
+  parted:
+    device: "{{ storage_data_partition }}"
+    unit: B
+    state: info
+  register: storage_data_partition_info
+
+- name: set lvm facts
+  set_fact:
+    storage_lvg_pvs: "{{ storage_data_partition }}"
+    storage_data_lv_opts: ""
+    storage_data_partition_size: |-
+      {% set data_storage_size = storage_data_partition_info['disk']['size'] - storage_data_partition_info['disk']['size'] / 2000 %}
+      {% set data_storage_size = data_storage_size - data_storage_size % 512 %}
+      {% set data_storage_size = data_storage_size - data_storage_size % (4 * 1024 * 1024) %}
+      {{ data_storage_size|int }}
+
+- debug: var=storage_data_partition_size
+
+- block:
+    - name: check cache partition
+      parted:
+        device: "{{ storage_cache_partition }}"
+        unit: B
+        state: info
+      register: storage_cache_partition_info
+
+    - name: set lvm opts
+      set_fact:
+        storage_lvg_pvs: "{{ storage_data_partition }},{{ storage_cache_partition }}"
+        storage_data_lv_opts: "--type cache --cachemode {{ storage_cache_mode }} --cachepool {{ storage_vg_name }}/cache"
+
+    - name: set lvm cache pool size
+      set_fact:
+        storage_cache_meta_size: |-
+          {% set cache_meta_size = storage_cache_partition_info['disk']['size'] / 1000 %}
+          {% set cache_meta_size = cache_meta_size - cache_meta_size % 512 %}
+          {% set cache_meta_size = cache_meta_size - cache_meta_size % (4 * 1024 * 1024) %}
+          {% if cache_meta_size < 12 * 1024 * 1024 %}
+          {% set cache_meta_size = 12 * 1024 * 1024 %}
+          {% endif %}
+          {{ cache_meta_size|int }}
+
+    - name: set lvm cache size
+      set_fact:
+        storage_cache_partition_size: |-
+          {% set cache_size = storage_cache_partition_info['disk']['size'] - storage_cache_meta_size|int * 2 %}
+          {% set cache_size = cache_size - cache_size % 512 %}
+          {% set cache_size = cache_size - cache_size % (4 * 1024 * 1024) %}
+          {{ cache_size|int }}
+
+    - debug: var=storage_cache_meta_size
+    - debug: var=storage_cache_partition_size
+
+  when: storage_cache_enabled|bool
+
+- debug: var=storage_lvg_pvs
+- debug: var=storage_data_lv_opts

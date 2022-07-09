@@ -1,0 +1,34 @@
+---
+- hosts: all
+  gather_facts: True
+
+  vars_files:
+    - group_vars/all
+    - group_vars/secrets
+
+  roles:
+    - { role: preflight, tags: [preflight] }
+    - { role: storage,   tags: [storage] }
+    - { role: network,   tags: [network] }
+    - { role: docker,    tags: [docker] }
+    - { role: homer,     tags: [homer] }
+    - { role: jellyfin,  tags: [jellyfin] }
+    - { role: peerflix,  tags: [peerflix] }
+
+  post_tasks:
+    - block:
+        - name: reboot server
+          reboot:
+            post_reboot_delay: 5
+            reboot_timeout: 60
+          ignore_errors: True
+
+        - name: wait for ssh port
+          wait_for:
+            host: "{{ network_ip_address.split('/')[0] }}"
+            port: 22
+            timeout: 30
+          retries: 3
+          delay: 60
+
+      when: force_reboot|bool

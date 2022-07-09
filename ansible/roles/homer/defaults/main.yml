@@ -1,0 +1,15 @@
+---
+homer_docker_image: b4bz/homer:v22.07.1
+
+homer_config_dir: /storage/docker/homer/config/
+homer_icons_dir: /storage/docker/homer/icons
+
+homer_logo_list:
+  - flaresolverr_logo.png
+  - jackett_logo.png
+  - jellyfin_logo.png
+  - peerflix_logo.png
+  - portainer_logo.png
+  - radarr_logo.png
+  - sonarr_logo.png
+  - zabbix_logo.png

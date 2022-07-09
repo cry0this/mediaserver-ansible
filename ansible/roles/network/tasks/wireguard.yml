@@ -1,0 +1,20 @@
+---
+- name: install wireguard packages
+  apt:
+    name: "{{ network_wireguard_apt_packages }}"
+  retries: 3
+  delay: 5
+
+- name: template wireguard config
+  template:
+    src: wireguard.conf.j2
+    dest: "/etc/wireguard/{{ network_wireguard_interface }}.conf"
+    owner: root
+    group: root
+    mode: 0400
+
+- name: ensure wireguard service enabled
+  service:
+    name: "wg-quick@{{ network_wireguard_interface }}"
+    enabled: yes
+    state: started

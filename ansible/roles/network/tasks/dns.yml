@@ -1,0 +1,42 @@
+---
+- name: install bind packages
+  apt:
+    name: "{{ network_dns_apt_packages }}"
+  retries: 3
+  delay: 5
+
+- name: setup only ipv4 for bind
+  lineinfile:
+    regex: '^OPTIONS='
+    line: 'OPTIONS="-u bind -4"'
+    path: /etc/default/named
+
+- name: template bind config
+  template:
+    src: bind.conf.j2
+    dest: /etc/bind/named.conf.local
+    owner: root
+    group: root
+    mode: 0644
+
+- name: template bind options config
+  template:
+    src: bind.options.j2
+    dest: /etc/bind/named.conf.options
+    owner: root
+    group: root
+    mode: 0644
+
+- name: template zone file
+  template:
+    src: bind.zone.j2
+    dest: "/etc/bind/db.{{ network_domain }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: ensure bind enabled
+  service:
+    name: named
+    enabled: yes
+    state: started
